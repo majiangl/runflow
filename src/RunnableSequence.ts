@@ -8,7 +8,7 @@ import { RunnableSequenceArray, RunnableSequenceProps } from "./RunnableSequence
  * and the output of each step is passed as input to the next step.
  *
  * @example
- * ```typescript
+ * ```TypeScript
  * const add = ({a, b}: { a: number; b: number}) => a + b;
  * const square = (x: number) => x * x;
  *

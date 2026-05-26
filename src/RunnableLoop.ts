@@ -15,7 +15,7 @@ import { RunnableLike } from "./Runnable.types";
  * The output of the Runnable is an array of results from each execution of the iteratee.
  *
  * @example
- * ```typescript
+ * ```TypeScript
  * const square = (x: number) => x * x;
  *
  * // Usage 1: Iterate the input

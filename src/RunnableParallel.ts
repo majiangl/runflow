@@ -8,7 +8,7 @@ import { RunnableParallelProps } from "./RunnableParallel.types";
  * It invokes Runnables concurrently, providing the same input to each.
  *
  * @example
- * ```typescript
+ * ```TypeScript
  * const parallel = RunnableParallel.from<number[], { sum: number; min: number; max: number}>({
  *   sum: (arr) => arr.reduce((a, b) => a + b, 0),
  *   min: (arr) => Math.min(...arr),
