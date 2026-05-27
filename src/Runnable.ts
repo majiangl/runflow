@@ -1,4 +1,4 @@
-import { RunMonitor, RunnableLike, RunnableProps } from "./Runnable.types";
+import { RunEvent, RunnableLike, RunnableProps, RunObserver, RunOptions } from "./Runnable.types";
 import RunnableSequence from "./RunnableSequence";
 
 /**
@@ -12,7 +12,7 @@ import RunnableSequence from "./RunnableSequence";
  */
 export default abstract class Runnable<RunInput, RunOutput> {
   /**
-   * The name of the runnable task.
+   * The user specified name
    * @private
    */
   #name?: string;
@@ -35,28 +35,60 @@ export default abstract class Runnable<RunInput, RunOutput> {
     this.#name = n;
   }
 
+  private notifyObservers(
+    observers: RunObserver[],
+    callbackName: keyof RunObserver,
+    event: RunEvent,
+  ) {
+    if (observers.length === 0) return;
+    for (const observer of observers) {
+      const callback = observer[callbackName];
+      if (callback) {
+        callback(event);
+      }
+    }
+  }
+
   /**
    * The public interface to run the runnable.
    *
    * @param input - The input for the runnable task.
-   * @param [monitor] - An optional monitor to track the execution.
+   * @param [options] - An optional run options object, such as containing observers.
    * @returns The output of the runnable task.
    */
-  async run(input: RunInput, monitor?: RunMonitor): Promise<RunOutput> {
+  async run(input: RunInput, options?: RunOptions): Promise<RunOutput> {
+    const startTime = Date.now();
+    const observers = options?.observers || [];
     let output: RunOutput | undefined;
     let error: Error | undefined;
 
+    this.notifyObservers(observers, "onStart", {
+      runnable: this,
+      input,
+      startTime,
+    });
+
     try {
-      // Record the start of the runnable task execution
-      monitor?.recordStart(this, input);
-      output = await this.executeTask(input, monitor);
+      output = await this._run(input, options);
       return output;
     } catch (e) {
       error = e instanceof Error ? e : new Error(String(e));
+      this.notifyObservers(observers, "onError", {
+        runnable: this,
+        input,
+        startTime,
+        error,
+      });
       throw error;
     } finally {
-      // Record the end of the runnable task execution
-      monitor?.recordEnd(this, output, error);
+      const endTime = Date.now();
+      this.notifyObservers(observers, "onEnd", {
+        runnable: this,
+        input,
+        output,
+        startTime,
+        endTime,
+      });
     }
   }
 
@@ -79,8 +111,8 @@ export default abstract class Runnable<RunInput, RunOutput> {
    * This method should contain the core logic of the runnable task.
    *
    * @param input - The input for the runnable task.
-   * @param [monitor] - An optional monitor to track the execution.
+   * @param [options] - An optional run options object.
    * @returns The output of the runnable task.
    */
-  protected abstract executeTask(input: RunInput, monitor?: RunMonitor): Promise<RunOutput>;
+  protected abstract _run(input: RunInput, options?: RunOptions): Promise<RunOutput>;
 }

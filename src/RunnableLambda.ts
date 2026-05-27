@@ -7,7 +7,7 @@ import { RunnableLambdaProps } from "./RunnableLambda.types";
  * makes the function usable in a sequence of operations, allowing it to be piped.
  *
  * @example
- * ```typescript
+ * ```TypeScript
  * const square = RunnableLambda.from<number, number>((x) => x * x);
  * const result = await square.run(5); // result will be 25
  * ```
@@ -37,7 +37,7 @@ export default class RunnableLambda<RunInput, RunOutput> extends Runnable<RunInp
     });
   }
 
-  async executeTask(input: RunInput): Promise<RunOutput> {
+  async _run(input: RunInput): Promise<RunOutput> {
     return this.#fn(input);
   }
 }

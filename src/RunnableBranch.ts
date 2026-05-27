@@ -1,6 +1,6 @@
 import Runnable from "./Runnable";
 import { coerceToRunnable } from "./utils";
-import { RunMonitor, RunnableLike } from "./Runnable.types";
+import { RunnableLike, RunOptions } from "./Runnable.types";
 import { Branch, BranchLike, RunnableBranchProps } from "./RunnableBranch.types";
 
 /**
@@ -13,7 +13,7 @@ import { Branch, BranchLike, RunnableBranchProps } from "./RunnableBranch.types"
  * If no condition evaluates to True, the default branch is run on the input.
  *
  * @example
- * ```typescript
+ * ```TypeScript
  * const branch = RunnableBranch.from<number, string>([
  *   [( input ) => input >= 60, ( input ) => 'Passed'],
  *   [( input ) => 'Failed'],
@@ -65,12 +65,12 @@ export default class RunnableBranch<RunInput, RunOutput> extends Runnable<RunInp
     });
   }
 
-  async executeTask(input: RunInput, monitor?: RunMonitor): Promise<RunOutput> {
+  async _run(input: RunInput, options?: RunOptions): Promise<RunOutput> {
     for (const [condition, branch] of this.#conditionalBranches) {
-      if (await condition.run(input, monitor)) {
-        return await branch.run(input, monitor);
+      if (await condition.run(input, options)) {
+        return await branch.run(input, options);
       }
     }
-    return await this.#defaultBranch.run(input, monitor);
+    return await this.#defaultBranch.run(input, options);
   }
 }

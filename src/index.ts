@@ -18,5 +18,3 @@ export * from "./RunnableSequence.types";
 
 export { default as RunnablePassThrough } from "./RunnablePassThrough";
 
-export { default as Runner } from "./Runner";
-export * from "./Runner.types";

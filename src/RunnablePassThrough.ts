@@ -7,7 +7,7 @@ import Runnable from "./Runnable";
  * @template RunInput - The type of the input and output.
  */
 export default class RunnablePassThrough<RunInput> extends Runnable<RunInput, RunInput> {
-  async executeTask(input: RunInput): Promise<RunInput> {
+  async _run(input: RunInput): Promise<RunInput> {
     return input;
   }
 }

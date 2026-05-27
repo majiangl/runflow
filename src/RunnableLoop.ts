@@ -66,7 +66,7 @@ export default class RunnableLoop<
     });
   }
 
-  async executeTask(input: RunInput): Promise<RunOutput> {
+  async _run(input: RunInput): Promise<RunOutput> {
     const results: IterateeOutput<RunOutput>[] = [];
 
     // If iterations is defined, run the iteratee for the specified number of times.

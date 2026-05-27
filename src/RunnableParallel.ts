@@ -1,6 +1,6 @@
 import { coerceToRunnable } from "./utils";
 import Runnable from "./Runnable";
-import { RunMonitor, RunnableLike, RunnableMap } from "./Runnable.types";
+import { RunOptions, RunnableLike, RunnableMap } from "./Runnable.types";
 import { RunnableParallelProps } from "./RunnableParallel.types";
 
 /**
@@ -46,11 +46,11 @@ export default class RunnableParallel<RunInput, RunOutput> extends Runnable<RunI
     });
   }
 
-  async executeTask(input: RunInput, monitor?: RunMonitor): Promise<RunOutput> {
+  async _run(input: RunInput, options?: RunOptions): Promise<RunOutput> {
     const output: Record<string, unknown> = {};
     await Promise.all(
       Object.entries(this.#steps).map(async ([key, value]) => {
-        output[key] = await value.run(input, monitor);
+        output[key] = await value.run(input, options);
       }),
     );
     return output as RunOutput;

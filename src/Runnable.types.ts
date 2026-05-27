@@ -17,11 +17,21 @@ export type RunnableLike<RunInput, RunOutput> =
   | RunnableFunction<RunInput, RunOutput>
   | RunnableMap<RunInput, RunOutput>;
 
-export interface RunMonitor {
-  recordStart: <Input, Output>(runnable: Runnable<Input, Output>, input: Input) => void;
-  recordEnd: <Input, Output>(
-    runnable: Runnable<Input, Output>,
-    output?: Output,
-    error?: Error,
-  ) => void;
+export interface RunEvent<Input = unknown, Output = unknown> {
+  runnable: Runnable<Input, Output>;
+  input: Input;
+  output?: Output;
+  error?: Error;
+  startTime: number;
+  endTime?: number;
+}
+
+export interface RunObserver {
+  onStart?: (event: RunEvent) => void;
+  onEnd?: (event: RunEvent) => void;
+  onError?: (event: RunEvent) => void;
+}
+
+export interface RunOptions {
+  observers?: RunObserver[];
 }

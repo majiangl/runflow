@@ -1,5 +1,5 @@
 {
-  "name": "easy-workflow",
+  "name": "runflow",
   "version": "1.0.0",
   "description": "A TypeScript library to create, run, and monitor workflows.",
   "main": "index.js",
@@ -8,18 +8,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://majiangl@github.com/majiangl/easy-workflow.git"
+    "url": "git+https://majiangl@github.com/majiangl/runflow.git"
   },
   "keywords": [
+    "runnable",
     "workflow",
     "pipeline"
   ],
   "author": "Ma, Jianglong",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/majiangl/easy-workflow/issues"
+    "url": "https://github.com/majiangl/runflow/issues"
   },
-  "homepage": "https://github.com/majiangl/easy-workflow#readme",
+  "homepage": "https://github.com/majiangl/runflow#readme",
   "devDependencies": {
     "@eslint/js": "^9.23.0",
     "eslint": "^9.23.0",

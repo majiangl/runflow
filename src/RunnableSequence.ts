@@ -1,6 +1,6 @@
 import Runnable from "./Runnable";
 import { coerceToRunnable } from "./utils";
-import { RunMonitor, RunnableLike } from "./Runnable.types";
+import { RunOptions, RunnableLike } from "./Runnable.types";
 import { RunnableSequenceArray, RunnableSequenceProps } from "./RunnableSequence.types";
 
 /**
@@ -41,10 +41,10 @@ export default class RunnableSequence<RunInput, RunOutput> extends Runnable<RunI
     });
   }
 
-  async executeTask(input: RunInput, monitor?: RunMonitor): Promise<RunOutput> {
+  async _run(input: RunInput, options?: RunOptions): Promise<RunOutput> {
     let output: unknown = input;
     for (const step of this.steps) {
-      output = await step.run(output, monitor);
+      output = await step.run(output, options);
     }
     return output as RunOutput;
   }
