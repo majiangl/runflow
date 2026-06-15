@@ -70,6 +70,14 @@ export default abstract class Runnable<RunInput, RunOutput> {
 
     try {
       output = await this._run(input, options);
+      const endTime = Date.now();
+      this.notifyObservers(observers, "onEnd", {
+        runnable: this,
+        input,
+        output,
+        startTime,
+        endTime,
+      });
       return output;
     } catch (e) {
       error = e instanceof Error ? e : new Error(String(e));
@@ -80,15 +88,6 @@ export default abstract class Runnable<RunInput, RunOutput> {
         error,
       });
       throw error;
-    } finally {
-      const endTime = Date.now();
-      this.notifyObservers(observers, "onEnd", {
-        runnable: this,
-        input,
-        output,
-        startTime,
-        endTime,
-      });
     }
   }
 

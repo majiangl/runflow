@@ -12,7 +12,7 @@ The repository is organized as follows:
   - `Runnable*.ts`: Various runnable implementations (e.g., `RunnableSequence.ts`, `RunnableBranch.ts`, etc.).
   - `Runnable*.types.ts`: TypeScript type definitions for the respective runnables.
   - `utils.ts`: Internal utility functions such as `coerceToRunnable`.
-- `docs/`: Documentation files, including the core architecture guide.
+- `docs/`: Documentation files.
 - `package.json`, `tsconfig.json`, `eslint.config.mjs`: Central configuration for Node, TypeScript, and linting.
 
 ## Architectural Concepts
@@ -51,9 +51,24 @@ To enable this natively, `runflow` uses the **Observer Pattern** architecture bu
 ### Events and Observers
 When the pipeline runs organically via `await myWorkflow.run(input, { observers: [...] })`, dynamic `RunEvent` objects are generated across the tree.
 
-Each step (`Runnable`) within a workflow will trigger:
-1. `onStart(event)`: Emits when a step begins processing. Gives you access to the step's identity (the `.runnable` reference), the `input` payload, and the `startTime`.
-2. `onEnd(event)`: Emits when a step successfully concludes. You get access to the transformed `.output` payload, the step identity, and the `endTime`.
-3. `onError(event)`: Emits if the step throws an exception, providing the extracted `.error`.
+Each step (`Runnable`) within a workflow will trigger specific events. Each event payload (`RunEvent`) contains structured data:
+
+1. **`onStart(event)`**: Emits when a step begins processing.
+   - `runnable`: The current `Runnable` instance.
+   - `input`: The input payload provided to the runnable.
+   - `startTime`: The epoch timestamp when execution began.
+
+2. **`onEnd(event)`**: Emits when a step successfully concludes.
+   - `runnable`: The current `Runnable` instance.
+   - `input`: The input payload provided to the runnable.
+   - `output`: The resulting transformed payload.
+   - `startTime`: The epoch timestamp when execution began.
+   - `endTime`: The epoch timestamp when execution finished.
+
+3. **`onError(event)`**: Emits if the step throws an exception.
+   - `runnable`: The current `Runnable` instance.
+   - `input`: The input payload provided to the runnable.
+   - `error`: The caught `Error` object.
+   - `startTime`: The epoch timestamp when execution began.
 
 This non-intrusive stream makes it easy to tie directly into structured logs, analytical backends (like Prometheus or Datadog), or UI execution dashboards.
