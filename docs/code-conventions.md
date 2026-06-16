@@ -2,11 +2,11 @@
 
 ## File Co-location
 
-Keep related files together in the same directory:
+Place a module's implementation, types, and tests in the same directory:
 
-- `RunnableFoo.ts` — implementation
-- `RunnableFoo.types.ts` — types and interfaces specific to this file
-- `RunnableFoo.test.ts` — tests for this file
+- `module.ts` — implementation
+- `module.types.ts` — types and interfaces
+- `module.test.ts` — tests
 
 ## Comments
 
@@ -21,5 +21,7 @@ i++; // increment i
 branches.slice(0, -1).forEach(/*...*/);
 ```
 
-Public classes and methods require JSDoc. Each class must include an `@example` block using a `TypeScript` code fence.
+### JSDoc
+
+All public classes and methods require JSDoc.
 
