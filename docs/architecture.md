@@ -27,14 +27,12 @@ Workflows are constructed by piping runnables representing each step, including 
 These are the building blocks of any workflow, representing the actual processing logic. They can be as simple as a function that transforms data or as complex as an API call.
 
 - **`RunnableLambda`**: Accepts a  JavaScript function and wraps it as a `Runnable`. This allows you to easily implement a runnable step within a workflow.
-- **`RunnablePassThrough`**: Provides no-op transitions across the sequence. Simply yields its input as its output. Useful as a placeholder or to tap a pipeline without transformation.
 
 ### Flow-Control Runnables
 These subclasses direct the control flow of the application based on varying internal rules:
 
 - **`RunnableSequence`**: Pipes the output of one step into the input of the next. Acts as a linear pipeline.
 - **`RunnableBranch`**: Evaluates conditions (which are themselves runnables returning a boolean) and routes the input into the corresponding executable branch. Similar to `if/else` or a `switch` statement but completely asynchronous and strongly typed.
-- **`RunnableLoop`**: Allows repeating a single task. It supports iterating over an array (acting like a map) or running a fixed number of times for the same input.
 - **`RunnableParallel`**: Accepts an object whose values are runnable tasks. It executes all tasks concurrently, passing in the same source input, and returns an aggregated object of outputs.
 
 ### Coercion / Syntactic Sugar
