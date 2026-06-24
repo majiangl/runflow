@@ -8,5 +8,4 @@ Consult these docs when needed:
 
 ## Documentation
 
-When implementing new features or making significant changes, update the relevant documentation
-files to reflect those changes.
+When implementing new features or making significant changes, update the relevant documentation files.

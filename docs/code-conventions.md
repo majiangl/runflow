@@ -23,5 +23,5 @@ branches.slice(0, -1).forEach(/*...*/);
 
 ### JSDoc
 
-All public classes and methods require JSDoc.
+All public classes and methods must have JSDoc.
 
